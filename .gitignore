@@ -1,0 +1,30 @@
+# config files
+proxy.config.json
+package-lock.json
+.vscode
+.git
+
+# node
+node_modules/
+
+# list files
+lists/*
+
+# not used
+assets/
+
+# distribution / packaging
+env/
+build/
+dist/
+test/
+
+# temp files
+src/app/*.js*
+src/*.js*
+
+
+
+
+
+

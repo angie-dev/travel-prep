@@ -1,0 +1,18 @@
+/* mat selection list */
+.item-list{ 
+    padding-bottom: 10px;
+    padding-top: 8px;
+} 
+
+.item-list .mat-list-option, .item-list .mat-list-item, .item-list .mat-list-item .mat-list-item-content {
+    height: 36px !important;
+    font-size: 14px;
+}
+
+.item-list .mat-list-option .mat-list-item-content .mat-list-text{
+    padding-left: 10px !important;
+    font-size: 14px;
+}
+
+
+

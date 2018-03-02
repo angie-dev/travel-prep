@@ -1,0 +1,127 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Load
+        </mat-panel-title>
+        <mat-panel-description>
+            Load a template or an existing list
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div fxLayout="row" fxFlexGaps="10px" fxLayoutAlign="end center" fxFlexFill>
+        <div fxFlexAlign="start center" fxFlex>
+            <mat-form-field>
+                    <mat-select placeholder="Pick list" [(ngModel)]="selectedList" name="saved_list">
+                        <mat-option *ngFor="let saved_list of saved_lists" [value]="saved_list">{{ saved_list }}</mat-option>
+                    </mat-select>
+            </mat-form-field>
+            <span>&nbsp;|&nbsp;Selected list : {{ selectedList }}</span>
+        </div>
+        <div fxFlexAlign="end center">
+            <button mat-raised-button color="accent" [disabled]="!selectedList" (click)="loadList(selectedList)">Load List</button>
+        </div>
+    </div>
+</mat-expansion-panel>
+
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+<div *ngIf="list">
+    <div fxFlexFill fxLayout="row" fxFlexGaps="20px" fxLayoutAlign="space-between center">
+        <span fxFlexAlign="start center" fxFlex>
+            My List:
+            <span class="pointer" *ngIf="!editmode" (click)="editmode=true">
+                {{ list.name }}
+                <mat-icon style="vertical-align: bottom">edit</mat-icon>
+            </span>
+            <span *ngIf="editmode">
+                <input matInput matTextareaAutosize matAutosizeMinRows="1" [(ngModel)]="list.name">
+                <mat-icon style="vertical-align: bottom" class="pointer" (click)="editmode=false">done</mat-icon>
+            </span>
+        </span>
+        <span fxFlexAlign="end center">
+            Save To: <input [(ngModel)]="list_name">.json
+            <button mat-raised-button color="accent" [disabled]="!list_name" (click)="res = saveList(list_name)">Save List</button>
+        </span>
+    </div>
+</div>
+
+<div>&nbsp;</div>
+
+<div fxLayout="row" fxFlexFill *ngIf="list">
+    <mat-card fxFlex="33">
+        <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">looks_one</mat-icon>
+            <mat-card-title>Choose</mat-card-title>
+            <mat-card-subtitle>Select needed items</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div *ngFor="let cat of list.categories; let i = index; trackBy: trackById">
+                <span class="category">
+                <mat-checkbox [(ngModel)]="cat.take" (change)="toggleAll(i, cat.take)"></mat-checkbox>
+                    <span class="pointer" (click)="cat.list = !cat.list">
+                        <span>{{cat?.name}}</span>
+                        <mat-icon style="vertical-align: bottom" *ngIf="cat.list">expand_less</mat-icon>
+                        <mat-icon style="vertical-align: bottom" *ngIf="!cat.list">expand_more</mat-icon>
+                    </span>
+                </span>
+                <mat-selection-list class="item-list" *ngIf="!cat.list">
+                        <mat-list-option *ngFor="let item of cat.items" [value]="item.name" [selected]="item.take" checkboxPosition="before" (selectionChange)="changeEvent(i, item)">
+                        <span class="item-name">{{item.name}}</span>
+                        </mat-list-option>
+                </mat-selection-list>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card fxFlex="33">
+        <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">looks_two</mat-icon>
+            <mat-card-title>Pack</mat-card-title>
+            <mat-card-subtitle>Verify and pack</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div *ngFor="let cat of list?.categories; let i = index; trackBy: trackById">
+                <span class="category" *ngIf="cat.has_items">
+                    {{cat.name}}
+                </span>
+                <mat-list class="item-list">
+                    <mat-list-item *ngFor="let item of filterTake(i)">
+                        <div fxLayout="row" fxFlexFill fxFlexGaps="10px" fxLayoutAlign="space-around center">
+                            <span class="item" fxFlexAlign="start center" fxFlex>
+                                <mat-checkbox [(ngModel)]="item.pack" fxFlex="grow">
+                                <span class="item-name">{{item.name}}</span>
+                                </mat-checkbox>
+                            </span>
+                            <span fxFlexAlign="end center">
+                                <mat-checkbox [(ngModel)]="item.act" fxFlex="auto"></mat-checkbox>
+                                <span fxFlex>&nbsp;&nbsp;</span>
+                                <input MatInput [(ngModel)]="item.default_action">
+                            </span>
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card fxFlex="34">
+        <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">looks_3</mat-icon>
+             <mat-card-title>TODO</mat-card-title>
+            <mat-card-subtitle>Go get things done</mat-card-subtitle>
+        </mat-card-header>
+       <mat-card-content>
+            <div *ngFor="let cat of list.categories; let i = index">
+                <mat-list class="item-list">
+                    <mat-list-item *ngFor="let item of filterDo(i)">
+                        <span class="item">
+                        <mat-checkbox [(ngModel)]="item.done" fxFlex="grow" >
+                            {{item.default_action}}&nbsp;{{item.name}}
+                        </mat-checkbox>
+                        </span>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+       </mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,15 @@
+ul {
+    list-style: none;
+ }
+ li {
+   display: inline;
+   font-size: 15px;
+   cursor: pointer;
+   &::after {
+     content: '|';
+     padding: 5px;
+   }
+   &:last-child::after {
+     content : '';
+   }
+ }
