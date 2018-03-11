@@ -18,11 +18,15 @@ export class ListComponent implements OnInit {
     public list_name;
     public saved_lists;
     public editmode = false;
+    public new_item: Item;
+    public new_category: Category;
 
     constructor( 
         private _listService: ListService
     ) { 
         this.list = new Template();
+        this.new_item = new Item();
+        this.new_category = new Category();
     }
     
     loadDefault(): void {
@@ -30,11 +34,13 @@ export class ListComponent implements OnInit {
             .then(list => this.list=list) ;
     }
 
-    changeEvent(cat_id: number, item : Item){
+    changeEvent(cat_id: number, item_id : number){
+        console.log('entering change event');
         var _category: Category = this.list.categories[cat_id];
-        item.take =! item.take;
+        var _item = _category.items[item_id];
+        _item.take =! _item.take;
         _category.take = false;
-        (item.take)?  _category.items_count+=1 : _category.items_count-=1;
+        (_item.take)?  _category.items_count+=1 : _category.items_count-=1;
         (_category.items_count >= 1)? _category.has_items = true : _category.has_items = false;
     }
 
@@ -54,6 +60,31 @@ export class ListComponent implements OnInit {
 
     filterDo(cat_id: number): Item[]{
         return this.list.categories[cat_id].items.filter(item => item.act);
+    }
+
+    deleteItem(cat_id: number, item_id:number): void{
+        this.list.categories[cat_id].items.splice(item_id, 1);
+    }
+
+    addItem(cat_id: number, item_name: string, default_action: string): void{
+        this.new_item.name = item_name;
+        this.new_item.default_action = default_action;
+        this.list.categories[cat_id].items.push(this.new_item);
+        this.new_item = new Item();
+    }
+
+    deleteCat(cat_id: number){
+        this.list.categories.splice(cat_id, 1);
+    }
+
+    addCat(cat_name: string): void{
+        this.new_category.name = cat_name;
+        this.list.categories.push(this.new_category);
+        this.new_category = new Category();
+    }
+
+    trackByFn(index, item){
+        return index;
     }
 
     ngOnInit(): void{

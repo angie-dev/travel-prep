@@ -55,20 +55,48 @@
             <mat-card-subtitle>Select needed items</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <div *ngFor="let cat of list.categories; let i = index; trackBy: trackById">
+            <div>
+                <input matInput placeholder="New Category..." [(ngModel)]="new_category.name">
+                <mat-icon style="vertical-align: bottom" class="pointer" (click)="addCat(new_category.name)">add</mat-icon>
+            </div>
+            <span>&nbsp;</span>
+            <mat-divider></mat-divider>
+            <span>&nbsp;</span>
+            <div *ngFor="let cat of list.categories; let i = index; trackBy: trackByFn">
                 <span class="category">
                 <mat-checkbox [(ngModel)]="cat.take" (change)="toggleAll(i, cat.take)"></mat-checkbox>
-                    <span class="pointer" (click)="cat.list = !cat.list">
-                        <span>{{cat?.name}}</span>
-                        <mat-icon style="vertical-align: bottom" *ngIf="cat.list">expand_less</mat-icon>
-                        <mat-icon style="vertical-align: bottom" *ngIf="!cat.list">expand_more</mat-icon>
+                    <span class="pointer">
+                        <span *ngIf="!cat.editmode">
+                            {{cat?.name}}
+                            <mat-icon style="vertical-align: bottom" (click)="cat.editmode=true">edit</mat-icon>
+                        </span>
+                        <span *ngIf="cat.editmode">
+                            <input matInput [(ngModel)]="cat.name">
+                            <mat-icon style="vertical-align: bottom" class="pointer" (click)="cat.editmode=false;cat.item_add=false">done</mat-icon>
+                            <mat-icon style="vertical-align: bottom" (click)="deleteCat(i)">delete</mat-icon>
+                            <mat-icon style="vertical-align: bottom" (click)="cat.item_add = true">add</mat-icon>
+                        </span>
+                        <mat-icon style="vertical-align: bottom" (click)="cat.list = !cat.list" *ngIf="cat.list">expand_less</mat-icon>
+                        <mat-icon style="vertical-align: bottom" (click)="cat.list = !cat.list" *ngIf="!cat.list">expand_more</mat-icon>
                     </span>
+
                 </span>
                 <mat-selection-list class="item-list" *ngIf="!cat.list">
-                        <mat-list-option *ngFor="let item of cat.items" [value]="item.name" [selected]="item.take" checkboxPosition="before" (selectionChange)="changeEvent(i, item)">
-                        <span class="item-name">{{item.name}}</span>
+                        <mat-list-option *ngFor="let item of cat.items; let j = index; trackBy: trackByFn" [value]="item.name" [selected]="item.take" [disabled]="cat.editmode" checkboxPosition="before" (selectionChange)="changeEvent(i, j)">
+                        <span class="item-name" *ngIf="!cat.editmode">
+                            {{item.name}}
+                        </span>
+                        <span *ngIf="cat.editmode">
+                            <input matInput [(ngModel)]="item.name">
+                            <mat-icon style="vertical-align: bottom" (click)="deleteItem(i, j)">delete</mat-icon>
+                        </span>
                         </mat-list-option>
                 </mat-selection-list>
+                <span *ngIf="cat.item_add">
+                    <input matInput placeholder="New Item..." [(ngModel)]="new_item.name">
+                    <input matInput placeholder="Default action..." [(ngModel)]="new_item.default_action">
+                    <mat-icon style="vertical-align: bottom" class="pointer" (click)="addItem(i, new_item.name, new_item.default_action)">done</mat-icon>
+                </span>
             </div>
         </mat-card-content>
     </mat-card>
@@ -84,7 +112,7 @@
                 <span class="category" *ngIf="cat.has_items">
                     {{cat.name}}
                 </span>
-                <mat-list class="item-list">
+                <mat-list *ngIf="cat.has_items" class="item-list">
                     <mat-list-item *ngFor="let item of filterTake(i)">
                         <div fxLayout="row" fxFlexFill fxFlexGaps="10px" fxLayoutAlign="space-around center">
                             <span class="item" fxFlexAlign="start center" fxFlex>
@@ -112,7 +140,7 @@
         </mat-card-header>
        <mat-card-content>
             <div *ngFor="let cat of list.categories; let i = index">
-                <mat-list class="item-list">
+                <mat-list *ngIf="cat.has_items" class="item-list">
                     <mat-list-item *ngFor="let item of filterDo(i)">
                         <span class="item">
                         <mat-checkbox [(ngModel)]="item.done" fxFlex="grow" >
