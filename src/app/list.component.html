@@ -123,7 +123,7 @@
                             <span fxFlexAlign="end center">
                                 <mat-checkbox [(ngModel)]="item.act" fxFlex="auto"></mat-checkbox>
                                 <span fxFlex>&nbsp;&nbsp;</span>
-                                <input MatInput [(ngModel)]="item.default_action">
+                                <input matInput [(ngModel)]="item.default_action">
                             </span>
                         </div>
                     </mat-list-item>
@@ -132,13 +132,13 @@
         </mat-card-content>
     </mat-card>
 
-    <mat-card fxFlex="34">
+    <mat-card fxFlex="34" fxLayout="column">
         <mat-card-header>
             <mat-icon mat-card-avatar color="primary">looks_3</mat-icon>
              <mat-card-title>TODO</mat-card-title>
             <mat-card-subtitle>Go get things done</mat-card-subtitle>
         </mat-card-header>
-       <mat-card-content>
+       <mat-card-content fxFlex>
             <div *ngFor="let cat of list.categories; let i = index">
                 <mat-list *ngIf="cat.has_items" class="item-list">
                     <mat-list-item *ngFor="let item of filterDo(i)">
@@ -150,6 +150,30 @@
                     </mat-list-item>
                 </mat-list>
             </div>
+       </mat-card-content>
+
+       <mat-card-content fxFlex fxLayout="column">
+        <div fxLayoutAlign="start end">
+            <mat-list class="item-list">
+                <mat-list-item *ngFor="let action of list.custom_actions; let a=index">
+                    <span *ngIf="!action?.edit">
+                        <span class="item">
+                        <mat-checkbox>{{action?.name}}</mat-checkbox>
+                        </span>
+                        <mat-icon class="pointer" (click)="action.edit = true">edit</mat-icon>
+                        <mat-icon class="pointer" (click)="removeCustomAction(a)">delete</mat-icon>
+                    </span>
+                    <span *ngIf="action?.edit">
+                        <input matInput [(ngModel)]="list.custom_actions[a].name">
+                        <mat-icon class="pointer" (click)="action.edit = false">done</mat-icon>
+                    </span>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <div style="width: 100%" fxLayoutAlign="start end">
+           <input matInput style="width: 100%" placeholder="Add other stuff to do" [(ngModel)]="new_action">
+           <mat-icon class="pointer" (click)="addCustomAction(new_action)">add</mat-icon>
+        </div>
        </mat-card-content>
     </mat-card>
 </div>

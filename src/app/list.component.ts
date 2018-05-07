@@ -17,6 +17,7 @@ export class ListComponent implements OnInit {
     public result;
     public list_name;
     public saved_lists;
+    public new_action;
     public editmode = false;
     public new_item: Item;
     public new_category: Category;
@@ -81,6 +82,17 @@ export class ListComponent implements OnInit {
         this.new_category.name = cat_name;
         this.list.categories.push(this.new_category);
         this.new_category = new Category();
+    }
+
+    addCustomAction(custom_action: string): void{
+        this.new_action = new Object();
+        this.new_action.name = custom_action;
+        this.list.custom_actions.push(this.new_action);
+        this.new_action = null;
+    }
+
+    removeCustomAction(custom_action_id: number): void{
+        this.list.custom_actions.splice(custom_action_id, 1);
     }
 
     trackByFn(index, item){

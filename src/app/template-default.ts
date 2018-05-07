@@ -23,5 +23,6 @@ export var DEFAULT_TEMPLATE: Template = {
                 {"name": 'Hat', "default_action": 'wash',"act": false, "take": false, "pack": false, "done": false}
             ]
         }
-    ]
+    ],
+    custom_actions: [{name:"Go see Dumbledore"}, {name:"Practice lockpicking"}] 
 }
