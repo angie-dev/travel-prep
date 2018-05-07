@@ -49,9 +49,12 @@ export class ListComponent implements OnInit {
         var _category: Category = this.list.categories[cat_id];
         _category.items.forEach((t: Item) => {
             toggle? _category.items_count+=1 : _category.items_count-=1; 
-            t.take = toggle; 
-            t.act = false; 
-            t.pack = false } )
+            t.take = toggle;
+            if (toggle == false) {
+                t.act = false;
+                t.pack = false;
+            } 
+        } )
         _category.has_items = toggle;
     }
 
