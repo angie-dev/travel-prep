@@ -13,6 +13,19 @@ var fs = require('fs');
 var default_file = 'lists/default-list.json';
 var default_dir = 'lists/';
 
+fs.stat(default_dir, function(err, stat){
+    if (err == null){
+        //do nothing
+    }
+    else if (err.code == 'ENOENT') {
+        fs.mkdir(default_dir, function(err){
+            if (err) { console.log('Failed creating directory: ', err)};
+        });
+    } else {
+        console.log('There is a problem with directory:', err);
+    }
+})
+
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname,'index.html'))
 });
