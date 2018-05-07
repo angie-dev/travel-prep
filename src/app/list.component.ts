@@ -66,6 +66,10 @@ export class ListComponent implements OnInit {
         return this.list.categories[cat_id].items.filter(item => item.act);
     }
 
+    testFilterDo(cat_id: number): boolean{
+        return this.list.categories[cat_id].items.some(item => item.act);
+    }
+
     deleteItem(cat_id: number, item_id:number): void{
         this.list.categories[cat_id].items.splice(item_id, 1);
     }

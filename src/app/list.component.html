@@ -140,7 +140,7 @@
         </mat-card-header>
        <mat-card-content fxFlex fxLayout="column">
             <div *ngFor="let cat of list.categories; let i = index">
-                <mat-list *ngIf="cat.has_items && filterDo(i)!=null" class="item-list">
+                <mat-list *ngIf="testFilterDo(i)" class="item-list">
                     <mat-list-item *ngFor="let item of filterDo(i)">
                         <span class="item">
                         <mat-checkbox [(ngModel)]="item.done" fxFlex="grow" >
