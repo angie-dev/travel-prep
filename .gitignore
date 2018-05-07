@@ -1,5 +1,6 @@
 # config files
 proxy.config.json
+package-lock.json
 .vscode
 .git
 
