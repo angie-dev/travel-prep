@@ -63,34 +63,43 @@
             <mat-divider></mat-divider>
             <span>&nbsp;</span>
             <div *ngFor="let cat of list.categories; let i = index; trackBy: trackByFn">
-                <span class="category">
-                <mat-checkbox [(ngModel)]="cat.take" (change)="toggleAll(i, cat.take)"></mat-checkbox>
-                    <span class="pointer">
+                <span class="category" fxFlexLayout="row" fxFlexFill fxLayoutAlign="start center">
+                    <span fxFlexAlign="start center" fxFlex>
+                        <mat-checkbox [(ngModel)]="cat.take" (change)="toggleAll(i, cat.take)">{{cat?.name}}</mat-checkbox>
                         <span *ngIf="!cat.editmode">
-                            {{cat?.name}}
-                            <mat-icon style="vertical-align: bottom" (click)="cat.editmode=true">edit</mat-icon>
+                            <mat-icon  class="pointer" style="vertical-align: bottom" (click)="cat.editmode=true">edit</mat-icon>
                         </span>
                         <span *ngIf="cat.editmode">
                             <input matInput [(ngModel)]="cat.name">
                             <mat-icon style="vertical-align: bottom" class="pointer" (click)="cat.editmode=false;cat.item_add=false">done</mat-icon>
-                            <mat-icon style="vertical-align: bottom" (click)="deleteCat(i)">delete</mat-icon>
-                            <mat-icon style="vertical-align: bottom" (click)="cat.item_add = true">add</mat-icon>
+                            <mat-icon style="vertical-align: bottom" class="pointer" (click)="deleteCat(i)">delete</mat-icon>
+                            <mat-icon style="vertical-align: bottom" class="pointer" (click)="cat.item_add = true">add</mat-icon>
                         </span>
-                        <mat-icon style="vertical-align: bottom" (click)="cat.list = !cat.list" *ngIf="cat.list">expand_less</mat-icon>
-                        <mat-icon style="vertical-align: bottom" (click)="cat.list = !cat.list" *ngIf="!cat.list">expand_more</mat-icon>
                     </span>
-
+                    <span fxFlexAlign="end center">
+                        <mat-icon style="vertical-align: bottom" class="pointer" (click)="cat.list = !cat.list" *ngIf="cat.list">expand_less</mat-icon>
+                        <mat-icon style="vertical-align: bottom" class="pointer" (click)="cat.list = !cat.list" *ngIf="!cat.list">expand_more</mat-icon>
+                    </span>
                 </span>
                 <mat-selection-list class="item-list" *ngIf="!cat.list">
-                        <mat-list-option *ngFor="let item of cat.items; let j = index; trackBy: trackByFn" [value]="item.name" [selected]="item.take" [disabled]="cat.editmode" checkboxPosition="before" (selectionChange)="changeEvent(i, j)">
-                        <span class="item-name" *ngIf="!cat.editmode">
-                            {{item.name}}
+                    <mat-list-option *ngFor="let item of cat.items; let j = index; trackBy: trackByFn" [value]="item.name" [selected]="item.take" [disabled]="cat.editmode" checkboxPosition="before" (selectionChange)="changeEvent(i, j)">
+                        <span fxFlexLayout="row" fxFlexFill fxLayoutAlign="start center"> 
+                            <span fxFlexAlign="start center" fxFlex="grow">
+                                <span class="item-name" *ngIf="!cat.editmode && !item.editmode">
+                                    {{item.name}}
+                                </span>
+                                <span *ngIf="cat.editmode || item.editmode">
+                                    <input matInput [(ngModel)]="item.name">
+                                    <input matInput [(ngModel)]="item.default_action">
+                                    <mat-icon style="vertical-align: bottom" (click)="deleteItem(i, j)">delete</mat-icon>
+                                </span>
+                            </span>
+                            <span *ngIf="!cat.editmode && !item.editmode" fxFlexAlign="end center" fxFlex>
+                                    ({{item.default_action}})
+                            </span>
                         </span>
-                        <span *ngIf="cat.editmode">
-                            <input matInput [(ngModel)]="item.name">
-                            <mat-icon style="vertical-align: bottom" (click)="deleteItem(i, j)">delete</mat-icon>
-                        </span>
-                        </mat-list-option>
+                    </mat-list-option>
+
                 </mat-selection-list>
                 <span *ngIf="cat.item_add">
                     <input matInput placeholder="New Item..." [(ngModel)]="new_item.name">
@@ -121,9 +130,8 @@
                                 </mat-checkbox>
                             </span>
                             <span fxFlexAlign="end center">
-                                <mat-icon class="pointer" fxFlex="auto" (click)="item.act=true">add</mat-icon>
-                                <span fxFlex>&nbsp;&nbsp;</span>
-                                <input matInput [(ngModel)]="item.default_action">
+                                <input matInput placeholder="{{item.default_action}}" [(ngModel)]="item.new_current_action">
+                                <mat-icon class="pointer" fxFlex="auto" (click)="addActionToItem(item, item.new_current_action)">add</mat-icon>
                             </span>
                         </div>
                     </mat-list-item>
@@ -140,38 +148,56 @@
         </mat-card-header>
        <mat-card-content fxFlex fxLayout="column">
             <div *ngFor="let cat of list.categories; let i = index">
-                <mat-list *ngIf="testFilterDo(i)" class="item-list">
-                    <mat-list-item *ngFor="let item of filterDo(i)">
-                        <span class="item">
-                        <mat-checkbox [(ngModel)]="item.done" fxFlex="grow" >
-                            [{{item.name}}]&nbsp;{{item.default_action}}
-                        </mat-checkbox>
-                        </span>
-                    </mat-list-item>
-                </mat-list>
+                <span *ngIf="testFilterDo(i)" class="item-list">
+                    <mat-list *ngFor="let item of filterDo(i); let j = index">
+                        <mat-list-item *ngFor="let action of item.current_actions; let a = index">
+                        <div fxFlex fxFlexLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                            <span *ngIf="!action.editmode" class="item" fxFlexAlign="start center">
+                                <mat-checkbox [(ngModel)]="action.done">
+                                    <span>[{{item.name}}] {{action.name}}</span>
+                                </mat-checkbox>
+                            </span>
+                            <span *ngIf="action.editmode" class="item" fxFlexAlign="start center" fxFlex="grow">
+                                <mat-checkbox [disabled]="true"></mat-checkbox>&nbsp;
+                                <span>[{{item.name}}]</span>&nbsp;
+                                <input matInput fxFlex="grow" [(ngModel)]="action.name">
+                            </span>
+                            <span *ngIf="!action.editmode" fxFlexAlign="end center">
+                                <mat-icon class="pointer" (click)="action.editmode = true">edit</mat-icon>
+                                <mat-icon class="pointer" (click)="deleteActionFromItem(i, j, a)">delete</mat-icon>
+                            </span>
+                            <span *ngIf="action.editmode" fxFlexAlign="end center">
+                                <mat-icon class="pointer" (click)="action.editmode = false">done</mat-icon>
+                            </span>
+                        </div>
+                        </mat-list-item>
+                    </mat-list>
+                </span>
             </div>
             <mat-list class="item-list">
                 <mat-list-item *ngFor="let action of list.custom_actions; let a=index">
-                    <div *ngIf="!action?.edit" fxFlex fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-                        <span class="item" fxFlexAlign="start center" fxFlex>
-                        <mat-checkbox>[Custom] {{action?.name}}</mat-checkbox>
+                    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                        <span *ngIf="!action.edit" class="item" fxFlexAlign="start center">
+                            <mat-checkbox>[Custom]&nbsp;{{action?.name}}</mat-checkbox>
                         </span>
-                        <span fxFlexAlign="end center">
+                        <span *ngIf="action.edit" class="item" fxFlexAlign="start center" fxFlex="grow">
+                            <mat-checkbox [disabled]="true"></mat-checkbox>&nbsp;
+                            <span>[Custom]&nbsp;</span>
+                            <input matInput fxFlex="grow" [(ngModel)]="list.custom_actions[a].name">
+                        </span>
+                        <span *ngIf="!action.edit" fxFlexAlign="end center">
                             <mat-icon class="pointer" (click)="action.edit = true">edit</mat-icon>
                             <mat-icon class="pointer" (click)="removeCustomAction(a)">delete</mat-icon>
                         </span>
-                    </div>
-                    <span *ngIf="action?.edit" fxFlex fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
-                        <span fxFlexAlign="start center" style="width:100%">
-                        [Custom]&nbsp;&nbsp;<input matInput fxFlex="grow" fxFlexAlign="start center" [(ngModel)]="list.custom_actions[a].name">
+                        <span *ngIf="action.edit" fxFlexAlign="end center">
+                            <mat-icon class="pointer" (click)="action.edit = false">done</mat-icon>
                         </span>
-                        <mat-icon fxFlexalign="end center" class="pointer" (click)="action.edit = false">done</mat-icon>
-                    </span>
+                    </div>
                 </mat-list-item>
             </mat-list>
         <div style="width: 100%" fxLayoutAlign="start end">
-           <input matInput style="width: 100%" placeholder="Add other stuff to do" [(ngModel)]="new_action">
-           <mat-icon class="pointer" (click)="addCustomAction(new_action)">add</mat-icon>
+           <input matInput style="width: 100%" placeholder="Add other stuff to do" [(ngModel)]="new_custom_action">
+           <mat-icon class="pointer" (click)="addCustomAction(new_custom_action)">add</mat-icon>
         </div>
        </mat-card-content>
     </mat-card>

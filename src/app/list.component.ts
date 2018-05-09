@@ -17,7 +17,8 @@ export class ListComponent implements OnInit {
     public result;
     public list_name;
     public saved_lists;
-    public new_action;
+    public new_custom_action;
+    public new_current_action;
     public editmode = false;
     public new_item: Item;
     public new_category: Category;
@@ -77,6 +78,7 @@ export class ListComponent implements OnInit {
     addItem(cat_id: number, item_name: string, default_action: string): void{
         this.new_item.name = item_name;
         this.new_item.default_action = default_action;
+        this.new_item.current_actions = [];
         this.list.categories[cat_id].items.push(this.new_item);
         this.new_item = new Item();
     }
@@ -91,11 +93,22 @@ export class ListComponent implements OnInit {
         this.new_category = new Category();
     }
 
+    addActionToItem(item: Item, action: string): void{
+        action? this.new_current_action = action: this.new_current_action = item.default_action;
+        item.current_actions.push({name: this.new_current_action, done: false});
+        this.new_current_action = item.default_action;
+        item.act = true;
+    }
+
+    deleteActionFromItem(cat_id: number, item_id: number, action_id: number): void{
+        this.list.categories[cat_id].items[item_id].current_actions.splice(action_id, 1);
+    }
+
     addCustomAction(custom_action: string): void{
-        this.new_action = new Object();
-        this.new_action.name = custom_action;
-        this.list.custom_actions.push(this.new_action);
-        this.new_action = null;
+        this.new_custom_action = new Object();
+        this.new_custom_action.name = custom_action;
+        this.list.custom_actions.push(this.new_custom_action);
+        this.new_custom_action = null;
     }
 
     removeCustomAction(custom_action_id: number): void{

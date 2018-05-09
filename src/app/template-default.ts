@@ -9,8 +9,8 @@ export var DEFAULT_TEMPLATE: Template = {
             "has_items": false,
             "items_count": 0,
             "items": [
-                {"name": 'Wand', "default_action": 'craft',"act": false, "take": false, "pack": false, "done": false},
-                {"name": 'Crystal Ball', "default_action": 'craft', "act": false, "take": false, "pack": false, "done": false}
+                {"name": 'Wand', "default_action": 'craft',"act": false, "take": false, "pack": false, current_actions: []},
+                {"name": 'Crystal Ball', "default_action": 'craft', "act": false, "take": false, "pack": false, current_actions: []}
             ]
         },
         {
@@ -19,8 +19,8 @@ export var DEFAULT_TEMPLATE: Template = {
             "has_items": false,
             "items_count": 0,
             "items": [
-                {"name": 'Cloak', "default_action": 'wash',"act": false, "take": false, "pack": false, "done": false},
-                {"name": 'Hat', "default_action": 'wash',"act": false, "take": false, "pack": false, "done": false}
+                {"name": 'Cloak', "default_action": 'wash',"act": false, "take": false, "pack": false, current_actions: []},
+                {"name": 'Hat', "default_action": 'wash',"act": false, "take": false, "pack": false, current_actions: []}
             ]
         }
     ],
