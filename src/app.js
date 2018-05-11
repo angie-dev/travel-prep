@@ -39,7 +39,7 @@ app.get('/api/lists', function (req,res) {
    return null;
 });
 
-app.get('/api/load/:name', function(req, res){
+app.get('/api/lists/:name', function(req, res){
    let name = req.params.name;
    fs.readFile(default_dir + name, function(err, file){
         if (err) throw err;
@@ -49,7 +49,7 @@ app.get('/api/load/:name', function(req, res){
    return null;
 });
 
-app.post('/api/save/:name', function(req, res){
+app.put('/api/lists/:name', function(req, res){
     let name = req.params.name;
     let data = req.body;
     fs.writeFile (default_dir + name, JSON.stringify(data), function(err){

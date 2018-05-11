@@ -23,7 +23,7 @@ export class ListService{
 
         saveList(data: Template, name: string){
             console.log('calling save list with ' + name + '.json');
-            return this.http.post('/api/save/' + name + '.json', data, httpOptions);
+            return this.http.put('/api/lists/' + name + '.json', data, httpOptions);
         }
 
         getLists(){
@@ -31,7 +31,7 @@ export class ListService{
         }
 
         loadList(name: string){
-            return this.http.get('/api/load/'+ name, httpOptions )
+            return this.http.get('/api/lists/'+ name, httpOptions )
         }
 }
 
