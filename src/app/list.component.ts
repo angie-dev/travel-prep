@@ -142,7 +142,7 @@ export class ListComponent implements OnInit {
         this._listService.saveList(this.list, name).subscribe(
             data => { savedlist = data},
             err => { console.log(err) ; this.result = false },
-            () => { console.log('done calling save API ' + savedlist) ; this.result = true}
+            () => { console.log('done calling save API ' + savedlist) ; this.result = true; this.getLists();}
         );
     }
 
