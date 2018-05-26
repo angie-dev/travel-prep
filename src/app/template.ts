@@ -5,5 +5,5 @@ import { Category } from './category';
 export class Template{
     name: string;
     categories: Category[];
-    custom_actions: { name: string}[];
+    custom_actions: { name: string, done: boolean}[];
 }

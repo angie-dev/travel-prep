@@ -17,10 +17,6 @@ export class ListFileService{
             private _http: HttpClient
         ){ }
     
-        loadDefault(): Promise<Template>{
-            return Promise.resolve(DEFAULT_TEMPLATE);
-        }
-
         saveList(data: Template, name: string): Observable<boolean>{
             return this._http.put<boolean>('/api/lists/' + name + '.json', data, httpOptions);
         }

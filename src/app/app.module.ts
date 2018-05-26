@@ -11,6 +11,7 @@ import { MaterialModule } from './material.module';
 import { AppComponent }  from './app.component';
 import { ListComponent } from './list.component';
 import { HeaderComponent } from './header.component';
+import { CustomActionsComponent } from './custom_actions.component';
 
 @NgModule({
   imports:      [ 
@@ -22,7 +23,7 @@ import { HeaderComponent } from './header.component';
     FlexLayoutModule,
     HttpClientModule
   ],
-  declarations: [ AppComponent, ListComponent, HeaderComponent ],
+  declarations: [ AppComponent, ListComponent, HeaderComponent, CustomActionsComponent ],
   providers: [ ],
   bootstrap:    [ AppComponent ]
 })

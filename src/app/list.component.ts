@@ -3,26 +3,34 @@ import { Template } from './template';
 import { Item } from './item';
 import { Category} from './category';
 
+import { CustomActionsComponent } from './custom_actions.component';
+
+import { ListDataService } from './list.data.service';
+
 @Component({
     selector: `my-list`,
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.scss'],
+    providers: [ListDataService]
 })
 
-export class ListComponent {
+export class ListComponent implements OnInit {
 
     @Input() list: Template;
-
-    public new_custom_action;
     public new_current_action;
     public editmode = false;
     public new_item: Item;
     public new_category: Category;
 
-    constructor( 
-    ) { 
+    constructor( private _listDataService: ListDataService ) { 
+        this._listDataService.currentList$.subscribe(list => this.list = list);
         this.new_item = new Item();
         this.new_category = new Category();
+    }
+
+    ngOnInit(){
+//        this._listDataService.currentList$.subscribe(list => this.list = list);
+ //       this._updateList();
     }
     
     changeEvent(cat_id: number, item_id : number){
@@ -33,6 +41,7 @@ export class ListComponent {
         _category.take = false;
         (_item.take)?  _category.items_count+=1 : _category.items_count-=1;
         (_category.items_count >= 1)? _category.has_items = true : _category.has_items = false;
+        //this._updateList();
     }
 
     toggleAll(cat_id: number, toggle: boolean): void{
@@ -46,6 +55,7 @@ export class ListComponent {
             } 
         } )
         _category.has_items = toggle;
+        //this._updateList();
     }
 
     filterTake(cat_id: number): Item[]{
@@ -62,6 +72,7 @@ export class ListComponent {
 
     deleteItem(cat_id: number, item_id:number): void{
         this.list.categories[cat_id].items.splice(item_id, 1);
+        this._updateList();
     }
 
     addItem(cat_id: number, item_name: string, default_action: string): void{
@@ -70,16 +81,19 @@ export class ListComponent {
         this.new_item.current_actions = [];
         this.list.categories[cat_id].items.push(this.new_item);
         this.new_item = new Item();
+        this._updateList();
     }
 
     deleteCat(cat_id: number){
         this.list.categories.splice(cat_id, 1);
+        this._updateList();
     }
 
     addCat(cat_name: string): void{
         this.new_category.name = cat_name;
         this.list.categories.push(this.new_category);
         this.new_category = new Category();
+        this._updateList();
     }
 
     addActionToItem(item: Item, action: string): void{
@@ -87,21 +101,17 @@ export class ListComponent {
         item.current_actions.push({name: this.new_current_action, done: false});
         this.new_current_action = item.default_action;
         item.act = true;
+        this._updateList();
     }
 
     deleteActionFromItem(cat_id: number, item_id: number, action_id: number): void{
         this.list.categories[cat_id].items[item_id].current_actions.splice(action_id, 1);
+        this._updateList();
     }
 
-    addCustomAction(custom_action: string): void{
-        this.new_custom_action = new Object();
-        this.new_custom_action.name = custom_action;
-        this.list.custom_actions.push(this.new_custom_action);
-        this.new_custom_action = null;
-    }
-
-    removeCustomAction(custom_action_id: number): void{
-        this.list.custom_actions.splice(custom_action_id, 1);
+    private _updateList(){
+        this._listDataService.updateList(this.list);
+        //console.log("ListComponent: " + JSON.stringify(this.list, undefined, 2));
     }
 
     trackByFn(index, item){

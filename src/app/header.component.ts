@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Template } from './template';
 import { ListFileService } from './list.file.service';
+import { ListDataService } from './list.data.service';
 import { Item } from './item';
 import { Category } from './category';
 
@@ -9,41 +10,31 @@ import { ListComponent } from './list.component';
 @Component({
     selector: `app-header`,
     templateUrl: './header.component.html',
-    providers: [ListFileService]
+    providers: [ListFileService, ListDataService]
 })
 
-export class HeaderComponent implements OnInit, AfterViewInit{
+export class HeaderComponent implements OnInit{
 
     public list: Template;
     public saved_lists: string[];
     public file_name: string;
 
-    @ViewChild(ListComponent) child;
-
     constructor( 
-        private _listFileService: ListFileService
+        private _listFileService: ListFileService,
+        private _listDataService: ListDataService
     ) { 
         this.list = new Template();
     }
 
     ngOnInit(): void{
-        this.loadDefault();
+        this._listDataService.currentList$.subscribe(list => this.list = list);
         this.getLists();
         this.file_name = 'default-list';
     }
-
-    ngAfterViewInit(){
-        this.list = this.child.list;
-    }
     
-    loadDefault(): void {
-        this._listFileService.loadDefault()
-            .then(list => this.list=list) ;
-    }
-
     loadList(name: string): void{
         this._listFileService.loadList(name).subscribe(
-            data => { this.list = data ; this.file_name = name.split(".", 2)[0]},
+            data => { this.list = data ; this.file_name = name.split(".", 2)[0]; this._updateList()},
             err => { console.log(err); },
             () => console.log('retrieved list ' + this.list)
         );
@@ -65,5 +56,10 @@ export class HeaderComponent implements OnInit, AfterViewInit{
             () => console.log('done retrieving lists: ' + this.saved_lists)
         );
     }
+
+    private _updateList(){
+        this._listDataService.updateList(this.list);
+    }
+
 
 }
