@@ -6,11 +6,6 @@
             <mat-card-subtitle>Select needed items</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <div>
-                <input matInput placeholder="New Category..." [(ngModel)]="new_category.name">
-                <mat-icon style="vertical-align: bottom" class="pointer" (click)="addCat(new_category.name)">add</mat-icon>
-            </div>
-            <span>&nbsp;</span>
             <mat-divider></mat-divider>
             <span>&nbsp;</span>
             <div *ngFor="let cat of list.categories; let i = index; trackBy: trackByFn">
@@ -58,6 +53,13 @@
                     <mat-icon style="vertical-align: bottom" class="pointer" (click)="addItem(i, new_item.name, new_item.default_action)">done</mat-icon>
                 </span>
             </div>
+
+            <div>
+                <span>&nbsp;</span>
+                <input matInput placeholder="New Category..." [(ngModel)]="new_category.name">
+                <mat-icon style="vertical-align: bottom" class="pointer" (click)="addCat(new_category.name)">add</mat-icon>
+            </div>
+
         </mat-card-content>
     </mat-card>
 
@@ -68,6 +70,8 @@
             <mat-card-subtitle>Verify and pack</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
+            <mat-divider></mat-divider>
+            <span>&nbsp;</span>
             <div *ngFor="let cat of list?.categories; let i = index; trackBy: trackById">
                 <span class="category" *ngIf="cat.has_items">
                     {{cat.name}}
@@ -98,6 +102,8 @@
             <mat-card-subtitle>Go get things done</mat-card-subtitle>
         </mat-card-header>
        <mat-card-content>
+            <mat-divider></mat-divider>
+            <span>&nbsp;</span>
            <div>
             <div *ngFor="let cat of list.categories; let i = index">
                 <span *ngIf="testFilterDo(i)" class="item-list">
