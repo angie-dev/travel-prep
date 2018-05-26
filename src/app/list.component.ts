@@ -1,22 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Template } from './template';
-import { ListService } from './list.service';
 import { Item } from './item';
 import { Category} from './category';
 
 @Component({
     selector: `my-list`,
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss'],
-    providers: [ListService]
+    styleUrls: ['./list.component.scss']
 })
 
-export class ListComponent implements OnInit {
+export class ListComponent {
 
-    public list;
-    public result;
-    public list_name;
-    public saved_lists;
+    @Input() list: Template;
+
     public new_custom_action;
     public new_current_action;
     public editmode = false;
@@ -24,18 +20,11 @@ export class ListComponent implements OnInit {
     public new_category: Category;
 
     constructor( 
-        private _listService: ListService
     ) { 
-        this.list = new Template();
         this.new_item = new Item();
         this.new_category = new Category();
     }
     
-    loadDefault(): void {
-        this._listService.loadDefault()
-            .then(list => this.list=list) ;
-    }
-
     changeEvent(cat_id: number, item_id : number){
         console.log('entering change event');
         var _category: Category = this.list.categories[cat_id];
@@ -119,39 +108,8 @@ export class ListComponent implements OnInit {
         return index;
     }
 
-    ngOnInit(): void{
-        this.loadDefault();
-        this.getLists();
-        this.list_name = 'default-list';
-    }
-
     showMe(): void{
         document.getElementById("json").innerHTML = JSON.stringify(this.list, undefined, 2);
-    }
-
-    loadList(name: string): void{
-        this._listService.loadList(name).subscribe(
-            data => { console.log(data) ; this.list = data ; this.list_name = name.split(".", 2)[0]},
-            err => { console.log(err); },
-            () => console.log('retrieved list ' + this.list)
-        );
-    }
-
-    saveList(name : string): void{
-        var savedlist;
-        this._listService.saveList(this.list, name).subscribe(
-            data => { savedlist = data},
-            err => { console.log(err) ; this.result = false },
-            () => { console.log('done calling save API ' + savedlist) ; this.result = true; this.getLists();}
-        );
-    }
-
-    getLists(){
-        this._listService.getLists().subscribe(
-            data => { this.saved_lists = data },
-            err => console.log(err),
-            () => console.log('done retrieving lists: ' + this.saved_lists)
-        );
     }
 
 }

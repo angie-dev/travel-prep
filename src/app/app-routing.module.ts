@@ -1,11 +1,11 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
  
-import { ListComponent } from './list.component';
+import { HeaderComponent } from './header.component';
  
 const routes: Routes = [
   { path: '', redirectTo: '/list', pathMatch: 'full' },
-  { path: 'list', component: ListComponent }
+  { path: 'list', component: HeaderComponent }
 ];
  
 @NgModule({

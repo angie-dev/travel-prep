@@ -10,6 +10,7 @@ import { MaterialModule } from './material.module';
 
 import { AppComponent }  from './app.component';
 import { ListComponent } from './list.component';
+import { HeaderComponent } from './header.component';
 
 @NgModule({
   imports:      [ 
@@ -21,7 +22,7 @@ import { ListComponent } from './list.component';
     FlexLayoutModule,
     HttpClientModule
   ],
-  declarations: [ AppComponent, ListComponent ],
+  declarations: [ AppComponent, ListComponent, HeaderComponent ],
   providers: [ ],
   bootstrap:    [ AppComponent ]
 })
