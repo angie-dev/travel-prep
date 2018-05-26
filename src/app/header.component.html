@@ -1,0 +1,50 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Load
+        </mat-panel-title>
+        <mat-panel-description>
+            Load a template or an existing list
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div fxLayout="row" fxFlexGaps="10px" fxLayoutAlign="end center" fxFlexFill>
+        <div fxFlexAlign="start center" fxFlex>
+            <mat-form-field>
+                    <mat-select placeholder="Pick list" [(ngModel)]="selectedList" name="saved_list">
+                        <mat-option *ngFor="let saved_list of saved_lists" [value]="saved_list">{{ saved_list }}</mat-option>
+                    </mat-select>
+            </mat-form-field>
+            <span>&nbsp;|&nbsp;Selected list : {{ selectedList }}</span>
+        </div>
+        <div fxFlexAlign="end center">
+            <button mat-raised-button color="accent" [disabled]="!selectedList" (click)="loadList(selectedList)">Load List</button>
+        </div>
+    </div>
+</mat-expansion-panel>
+
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+<div *ngIf="list">
+    <div fxFlexFill fxLayout="row" fxFlexGaps="20px" fxLayoutAlign="space-between center">
+        <span fxFlexAlign="start center" fxFlex>
+            My List:
+            <span class="pointer" *ngIf="!editmode" (click)="editmode=true">
+                {{ list.name }}
+                <mat-icon style="vertical-align: bottom">edit</mat-icon>
+            </span>
+            <span *ngIf="editmode">
+                <input matInput matTextareaAutosize matAutosizeMinRows="1" [(ngModel)]="list.name">
+                <mat-icon style="vertical-align: bottom" class="pointer" (click)="editmode=false">done</mat-icon>
+            </span>
+        </span>
+        <span fxFlexAlign="end center">
+            Save To: <input [(ngModel)]="file_name">.json
+            <button mat-raised-button color="accent" [disabled]="!file_name" (click)="res = saveList(file_name)">Save List</button>
+        </span>
+    </div>
+</div>
+
+<div>&nbsp;</div>
+
+<my-list [list]="list"></my-list>
