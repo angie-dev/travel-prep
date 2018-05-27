@@ -24,5 +24,5 @@ export var DEFAULT_TEMPLATE: Template = {
             ]
         }
     ],
-    custom_actions: [{name:"Go see Dumbledore"}, {name:"Practice lockpicking"}] 
+    custom_actions: [{name:"Go see Dumbledore", done: false}, {name:"Practice lockpicking", done: false}] 
 }

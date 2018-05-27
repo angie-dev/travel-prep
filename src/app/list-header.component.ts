@@ -9,11 +9,11 @@ import { ListComponent } from './list.component';
 
 @Component({
     selector: `app-header`,
-    templateUrl: './header.component.html',
+    templateUrl: './list-header.component.html',
     providers: [ListFileService, ListDataService]
 })
 
-export class HeaderComponent implements OnInit{
+export class ListHeaderComponent implements OnInit{
 
     public list: Template;
     public saved_lists: string[];

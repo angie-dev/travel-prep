@@ -15,7 +15,7 @@ export class ListDataService{
 
     updateList(list: Template){
         this._listSource.next(list);
-        console.log("DataService: " + JSON.stringify(list, undefined, 2 ));
+        //console.log("DataService: " + JSON.stringify(list, undefined, 2 ));
     }
 
 }

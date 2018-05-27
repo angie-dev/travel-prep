@@ -3,7 +3,7 @@ import { Template } from './template';
 import { Item } from './item';
 import { Category} from './category';
 
-import { CustomActionsComponent } from './custom_actions.component';
+import { ListCustomActionsComponent } from './list-custom_actions.component';
 
 import { ListDataService } from './list.data.service';
 

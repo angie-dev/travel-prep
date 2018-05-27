@@ -5,11 +5,11 @@ import { ListDataService } from './list.data.service';
 
 @Component({
     selector: `div-custom-actions`,
-    templateUrl: './custom_actions.component.html',
+    templateUrl: './list-custom_actions.component.html',
     providers: [ListDataService]
 })
 
-export class CustomActionsComponent implements OnInit {
+export class ListCustomActionsComponent implements OnInit {
 
     @Input() list: Template;
 

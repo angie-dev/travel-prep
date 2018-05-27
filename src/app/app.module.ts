@@ -10,8 +10,8 @@ import { MaterialModule } from './material.module';
 
 import { AppComponent }  from './app.component';
 import { ListComponent } from './list.component';
-import { HeaderComponent } from './header.component';
-import { CustomActionsComponent } from './custom_actions.component';
+import { ListHeaderComponent } from './list-header.component';
+import { ListCustomActionsComponent } from './list-custom_actions.component';
 
 @NgModule({
   imports:      [ 
@@ -23,7 +23,7 @@ import { CustomActionsComponent } from './custom_actions.component';
     FlexLayoutModule,
     HttpClientModule
   ],
-  declarations: [ AppComponent, ListComponent, HeaderComponent, CustomActionsComponent ],
+  declarations: [ AppComponent, ListComponent, ListHeaderComponent, ListCustomActionsComponent ],
   providers: [ ],
   bootstrap:    [ AppComponent ]
 })
