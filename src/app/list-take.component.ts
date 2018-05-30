@@ -3,33 +3,35 @@ import { Template } from './template';
 import { Item } from './item';
 import { Category} from './category';
 
-import { ListCrudComponent } from './list-crud.component';
-import { ListTakeComponent } from './list-take.component';
-import { ListItemActionsComponent } from './list-item_actions.component';
-import { ListCustomActionsComponent } from './list-custom_actions.component';
-
 import { ListDataService } from './list.data.service';
 
 @Component({
-    selector: `my-list`,
-    templateUrl: './list.component.html',
+    selector: `div-list-take`,
+    templateUrl: './list-take.component.html',
     styleUrls: ['./list.component.scss'],
     providers: [ListDataService]
 })
 
-export class ListComponent {
+export class ListTakeComponent {
 
     @Input() list: Template;
-    
     public new_current_action;
-    public editmode = false;
-    public new_item: Item;
-    public new_category: Category;
 
     constructor( private _listDataService: ListDataService ) { 
         this._listDataService.currentList$.subscribe(list => this.list = list);
-        this.new_item = new Item();
-        this.new_category = new Category();
+
+    }
+   
+    filterTake(cat_id: number): Item[]{
+        return this.list.categories[cat_id].items.filter(item => item.take);
+    }
+
+    addActionToItem(item: Item, action: string): void{
+        action? this.new_current_action = action: this.new_current_action = item.default_action;
+        item.current_actions.push({name: this.new_current_action, done: false});
+        this.new_current_action = item.default_action;
+        item.act = true;
+        this._updateList();
     }
 
     private _updateList(){

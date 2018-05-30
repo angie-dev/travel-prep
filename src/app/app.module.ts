@@ -11,6 +11,9 @@ import { MaterialModule } from './material.module';
 import { AppComponent }  from './app.component';
 import { ListComponent } from './list.component';
 import { ListHeaderComponent } from './list-header.component';
+import { ListCrudComponent } from './list-crud.component';
+import { ListTakeComponent } from './list-take.component';
+import { ListItemActionsComponent } from './list-item_actions.component';
 import { ListCustomActionsComponent } from './list-custom_actions.component';
 
 @NgModule({
@@ -23,7 +26,7 @@ import { ListCustomActionsComponent } from './list-custom_actions.component';
     FlexLayoutModule,
     HttpClientModule
   ],
-  declarations: [ AppComponent, ListComponent, ListHeaderComponent, ListCustomActionsComponent ],
+  declarations: [ AppComponent, ListComponent, ListHeaderComponent, ListCrudComponent, ListTakeComponent, ListItemActionsComponent, ListCustomActionsComponent ],
   providers: [ ],
   bootstrap:    [ AppComponent ]
 })

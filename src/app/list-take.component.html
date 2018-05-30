@@ -1,0 +1,22 @@
+<mat-divider></mat-divider>
+<span>&nbsp;</span>
+<div *ngFor="let cat of list?.categories; let i = index; trackBy: trackById">
+    <span class="category" *ngIf="cat.has_items">
+        {{cat.name}}
+    </span>
+    <mat-list *ngIf="cat.has_items" class="item-list">
+        <mat-list-item *ngFor="let item of filterTake(i)">
+            <div fxLayout="row" fxFlexFill fxFlexGaps="10px" fxLayoutAlign="space-around center">
+                <span class="item" fxFlexAlign="start center" fxFlex>
+                    <mat-checkbox [(ngModel)]="item.pack" fxFlex="grow">
+                    <span class="item-name">{{item.name}}</span>
+                    </mat-checkbox>
+                </span>
+                <span fxFlexAlign="end center">
+                    <input matInput placeholder="{{item.default_action}}" [(ngModel)]="item.new_current_action">
+                    <mat-icon class="pointer" fxFlex="auto" (click)="addActionToItem(item, item.new_current_action)">add</mat-icon>
+                </span>
+            </div>
+        </mat-list-item>
+    </mat-list>
+</div>

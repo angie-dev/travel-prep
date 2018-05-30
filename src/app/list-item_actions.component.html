@@ -1,0 +1,29 @@
+<mat-divider></mat-divider>
+<span>&nbsp;</span>
+<div *ngFor="let cat of list.categories; let i = index">
+    <span *ngIf="testFilterDo(i)" class="item-list">
+        <mat-list *ngFor="let item of filterDo(i); let j = index">
+            <mat-list-item *ngFor="let action of item.current_actions; let a = index">
+                <div fxFlex fxFlexLayout="row" fxLayoutAlign="space-between center" fxFlexFill>
+                    <span *ngIf="!action.editmode" class="item" fxFlexAlign="start center">
+                        <mat-checkbox [(ngModel)]="action.done">
+                            <span>[{{item.name}}] {{action.name}}</span>
+                        </mat-checkbox>
+                    </span>
+                    <span *ngIf="action.editmode" class="item" fxFlexAlign="start center" fxFlex="grow">
+                        <mat-checkbox [disabled]="true"></mat-checkbox>&nbsp;
+                        <span>[{{item.name}}]</span>&nbsp;
+                        <input matInput fxFlex="grow" [(ngModel)]="action.name">
+                    </span>
+                    <span *ngIf="!action.editmode" fxFlexAlign="end center">
+                        <mat-icon class="pointer" (click)="action.editmode = true">edit</mat-icon>
+                        <mat-icon class="pointer" (click)="deleteActionFromItem(i, j, a)">delete</mat-icon>
+                    </span>
+                    <span *ngIf="action.editmode" fxFlexAlign="end center">
+                        <mat-icon class="pointer" (click)="action.editmode = false">done</mat-icon>
+                    </span>
+                </div>
+            </mat-list-item>
+        </mat-list>
+    </span>
+</div>
