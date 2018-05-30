@@ -60,7 +60,6 @@ export class ListCrudComponent {
         this.new_item.name = item_name;
         this.new_item.default_action = default_action;
         this.new_item.current_actions = [];
-        console.log(JSON.stringify(this.list.categories[cat_id]);
         this.list.categories[cat_id].items.push(this.new_item);
         this.new_item = new Item();
         this._updateList();
